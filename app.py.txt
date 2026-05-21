@@ -1,0 +1,48 @@
+import streamlit as st
+import time
+
+# Cấu hình trang web theo phong cách Rimberio Co [cite: 1]
+st.set_page_config(page_title="Dr.Plant AI - Rimberio Co", layout="wide")
+
+st.title("🌱 Dr.Plant AI - Hệ thống chẩn đoán sức khỏe cây trồng")
+st.markdown("---")
+
+# Phần giới thiệu dựa trên MTC 1.a [cite: 5, 12, 13]
+st.sidebar.header("Thông tin dự án")
+st.sidebar.info("""
+**Thành viên:** G.Đạt, N.Anh, Đ.Minh [cite: 3]
+**Giải pháp:** Sử dụng Deep Learning & Computer Vision để nhận diện bệnh lý cây trồng[cite: 8, 83].
+""")
+
+# Giao diện tải ảnh/camera
+uploaded_file = st.file_uploader("Chụp ảnh hoặc tải lên hình ảnh lá cây để phân tích...", type=["jpg", "png", "jpeg"])
+
+if uploaded_file is not None:
+    st.image(uploaded_file, caption='Ảnh đã tải lên', use_column_width=True)
+    
+    with st.spinner('Đang phân tích dữ liệu hình ảnh (MTC 2.e)... [cite: 7, 41]'):
+        # Mô phỏng quá trình xử lý Big Data & Deep Learning [cite: 10, 77, 101]
+        time.sleep(3) 
+        
+    # Giả lập kết quả chẩn đoán (Trong thực tế sẽ kết nối với model .h5 hoặc .pth)
+    # Ở đây tôi thiết lập logic: Phát hiện bệnh -> Đưa ra giải pháp sinh học [cite: 24, 25]
+    status = "Cảnh báo: Phát hiện dấu hiệu Nấm mốc / Thiếu dinh dưỡng"
+    
+    st.subheader("📊 Kết quả phân tích")
+    st.warning(status)
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write("**Tình trạng:**")
+        st.write("- Xuất hiện đốm nâu và vàng lá (MTC 3.a)[cite: 8, 14].")
+        st.write("- AI xác định mật độ nhiễm bệnh qua Heatmap[cite: 70].")
+    
+    with col2:
+        st.write("**Giải pháp đề xuất (Ưu tiên sinh học):** [cite: 24]")
+        st.success("""
+        1. Cách ly cây bị bệnh để tránh lây lan[cite: 71].
+        2. Sử dụng chế phẩm sinh học (nước tỏi/ớt hoặc nấm đối kháng).
+        3. Điều chỉnh độ ẩm và ánh sáng dựa trên dữ liệu cảm biến[cite: 23].
+        """)
+
+    st.info("💡 **Lưu ý:** AI đóng vai trò trợ lý sàng lọc. Người dùng nên kiểm tra thực tế để đưa ra quyết định cuối cùng[cite: 25, 26].")
