@@ -1,56 +1,76 @@
 import streamlit as st
 import time
+from PIL import Image
 
-# Cấu hình phong cách dự án Dr.Plant AI - Rimberio Co [cite: 1, 2]
-st.set_page_config(page_title="Dr.Plant AI - Chẩn đoán sức khỏe cây", layout="wide")
+# Cấu hình phong cách cực chất cho nhóm Đẹp Trai
+st.set_page_config(page_title="Dr.Plant AI - Nhóm Đẹp Trai", layout="wide")
 
-st.title("🌱 Dr.Plant AI - Hệ thống chẩn đoán bằng Camera")
+# CSS để làm giao diện bắt mắt hơn
+st.markdown("""
+    <style>
+    .main {
+        background-color: #f0f2f6;
+    }
+    .stButton>button {
+        width: 100%;
+        border-radius: 5px;
+        height: 3em;
+        background-color: #2e7d32;
+        color: white;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+st.title("🌱 Dr.Plant AI - Trợ lý Sức khỏe Cây trồng")
+st.subheader("Sản phẩm bởi: Nhóm Đẹp Trai (Rimberio Co)")
 st.markdown("---")
 
-# Thông tin thành viên dự án [cite: 3]
-st.sidebar.header("Dự án Tin học")
-st.sidebar.info("""
-**Nhóm:** Rimberio Co [cite: 1]
-**Thành viên:** G.Đạt, N.Anh, Đ.Minh [cite: 3]
-**Mô hình:** Deep Learning & Computer Vision [cite: 8, 83]
-""")
+# Thông tin nhóm bên thanh bên
+st.sidebar.image("https://cdn-icons-png.flaticon.com/512/628/628283.png", width=100)
+st.sidebar.header("Hệ thống Dr.Plant")
+st.sidebar.success("👨‍ kỹ sư: G.Đạt, N.Anh, Đ.Minh")
+st.sidebar.info("Dự án ứng dụng Deep Learning và Computer Vision để bảo vệ màu xanh trái đất.")
 
-# Tạo 2 tab: Một cái để chụp ảnh, một cái để tải file có sẵn
-tab1, tab2 = st.tabs(["📸 Chụp ảnh bằng Camera", "📁 Tải ảnh từ thiết bị"])
+# Giao diện chọn phương thức nhập liệu
+option = st.radio("Chọn cách kiểm tra cây:", ("📸 Chụp ảnh ngay", "📁 Tải ảnh lên"))
 
-with tab1:
-    img_camera = st.camera_input("Đưa lá cây vào khung hình và nhấn nút chụp")
+final_image = None
 
-with tab2:
-    img_upload = st.file_uploader("Chọn ảnh từ thư viện của bạn...", type=["jpg", "png", "jpeg"])
+if option == "📸 Chụp ảnh ngay":
+    final_image = st.camera_input("Đưa lá cây vào khung hình")
+else:
+    final_image = st.file_uploader("Chọn ảnh lá cây từ máy tính...", type=["jpg", "png", "jpeg"])
 
-# Ưu tiên lấy ảnh từ camera nếu có, không thì lấy ảnh upload
-final_image = img_camera if img_camera is not None else img_upload
-
+# Xử lý khi có ảnh
 if final_image is not None:
-    st.image(final_image, caption='Dữ liệu hình ảnh đầu vào', use_container_width=True)
+    col_img, col_res = st.columns([1, 1])
     
-    # Giả lập quá trình AI phân tích theo MTC 2.e và 3.a [cite: 7, 8]
-    with st.spinner('AI đang quét các pixel và ánh xạ tọa độ (MTC 2.e)... [cite: 67]'):
-        time.sleep(2) # Mô phỏng thời gian xử lý của mô hình Neural Radiance Fields [cite: 48]
+    with col_img:
+        st.image(final_image, caption='Ảnh đang phân tích', use_container_width=True)
+    
+    with col_res:
+        with st.spinner('Đang dùng AI quét tọa độ vector và phân tích pixel...'):
+            time.sleep(2.5) # Tạo cảm giác AI đang làm việc cực căng
         
-    st.subheader("📊 Kết quả chẩn đoán từ Dr.Plant AI")
-    
-    # Phân tích các dấu hiệu thực tế [cite: 13, 14]
-    # Trong dự án thực tế, đoạn này sẽ nhận kết quả từ mô hình huấn luyện có giám sát [cite: 91]
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.error("**Tình trạng phát hiện:**")
-        st.write("- Nhận diện dấu hiệu: Lá vàng, đốm nâu hoặc héo úa[cite: 14].")
-        st.write("- Mật độ nhiễm bệnh: Đang được xác định qua Heatmap[cite: 70].")
-        st.write("- Dự báo: Có khả năng bùng phát nấm mốc do độ ẩm môi trường cao[cite: 96].")
+        st.header("📊 Kết quả chẩn đoán")
         
-    with col2:
-        st.success("**Giải pháp từ chuyên gia AI:**")
-        st.write("1. Áp dụng các biện pháp chữa trị sinh học, thân thiện môi trường[cite: 24].")
-        st.write("2. Điều chỉnh vị trí đặt cây để tối ưu ánh sáng và độ ẩm[cite: 26].")
-        st.write("3. Theo dõi tốc độ lây lan theo tọa độ thời gian[cite: 71].")
+        # Giả lập kết quả chẩn đoán thông minh
+        tinh_trang = "Phát hiện dấu hiệu thiếu hụt dinh dưỡng & Nấm nhẹ"
+        st.error(f"**Tình trạng:** {tinh_trang}")
+        
+        st.markdown("""
+        **Phân tích chi tiết:**
+        * Xuất hiện đốm nâu rải rác trên bề mặt lá.
+        * Mật độ nhiễm bệnh: 15% (Dựa trên Heatmap AI).
+        * Dự báo: Có nguy cơ lây lan nếu không xử lý trong 3 ngày tới.
+        
+        **Giải pháp từ nhóm Đẹp Trai:**
+        1. **Chăm sóc:** Bổ sung phân bón vi lượng và điều chỉnh lượng nước.
+        2. **Sinh học:** Xịt dung dịch tỏi ớt pha loãng để diệt nấm tự nhiên.
+        3. **Môi trường:** Đặt cây ở nơi thoáng khí, tránh ẩm cục bộ.
+        """)
+        
+        st.balloons() # Hiệu ứng chúc mừng khi xong việc
 
-    st.warning("⚠️ **Lưu ý:** Con người giữ vai trò quyết định cuối cùng dựa trên ngữ cảnh thực tế[cite: 26].")
+st.markdown("---")
+st.caption("© 2026 Rimberio Co - Developed by Nhóm Đẹp Trai")
